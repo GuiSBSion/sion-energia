@@ -1,0 +1,762 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Boletim Semanal - Sion Energia</title>
+
+    <!-- Fontes Premium -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Montserrat:wght@400;500;600;800;900&display=swap" rel="stylesheet">
+    
+    <!-- Ícones -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <style>
+        :root {
+            /* Cores da Marca */
+            --sion-dark: #2f2f2f;
+            --sion-darker: #1a1a1a;
+            --sion-blue: #384974;
+            --sion-blue-metal: #627bbb; /* Tom claro derivado do azul Sion para o efeito metálico */
+            
+            /* Gradientes Metálicos para Destaques */
+            --metal-bg: linear-gradient(135deg, var(--sion-blue) 0%, var(--sion-blue-metal) 100%);
+            --metal-text: linear-gradient(to right, var(--sion-dark) 0%, var(--sion-blue-metal) 100%);
+            
+            /* Layout e Fundos */
+            --bg-page: #ffffff;
+            --bg-light: #f4f6f9;
+            --text-main: #333333;
+            --text-muted: #666666;
+            --border-light: #e2e8f0;
+            
+            /* Cores de Status */
+            --status-green: #10b981;
+            --status-yellow: #f59e0b;
+            --status-orange: #f97316;
+            --status-red: #ef4444;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-print-color-adjust: exact !important;
+            print-color-adjust: exact !important;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #e2e8f0; 
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 25px;
+            padding: 25px;
+        }
+
+        /* Página A4 Vertical */
+        .page {
+            width: 210mm;
+            height: 297mm;
+            background-color: var(--bg-page);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.15);
+            position: relative;
+            overflow: hidden;
+            page-break-after: always;
+            display: flex;
+            flex-direction: column;
+        }
+
+        @media print {
+            body { background: none; padding: 0; gap: 0; }
+            .page { margin: 0; box-shadow: none; border: none; }
+            @page { size: A4 portrait; margin: 0; }
+        }
+
+        /* --- TIPOGRAFIA --- */
+        h1, h2, h3, h4, .font-brand { font-family: 'Montserrat', sans-serif; }
+        
+        .section-title {
+            font-size: 18pt;
+            font-weight: 800;
+            margin-bottom: 2mm;
+            background: var(--metal-text);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            display: inline-block;
+            letter-spacing: -0.5px;
+        }
+
+        .section-desc {
+            font-size: 9.5pt;
+            color: var(--text-muted);
+            line-height: 1.6;
+            margin-bottom: 5mm;
+            text-align: justify;
+        }
+
+        /* --- LOGOTIPOS (CLASSES NOVAS) --- */
+        .cover-logo-img {
+            height: 75px; /* Altura ideal sugerida para a logo na capa */
+            width: auto;
+            max-width: 100%;
+            object-fit: contain;
+        }
+
+        .header-logo-img {
+            height: 28px; /* Altura ideal sugerida para a logo no cabeçalho */
+            width: auto;
+            max-width: 100%;
+            object-fit: contain;
+        }
+
+        .footer-logo-img {
+            height: 45px; /* Altura ideal sugerida para a logo no rodapé */
+            width: auto;
+            max-width: 100%;
+            object-fit: contain;
+        }
+
+        /* --- ESTRUTURA INTERNA --- */
+        .content-area {
+            padding: 22mm 15mm 15mm 15mm;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 4mm;
+        }
+
+        /* Header das Páginas Internas */
+        .internal-header {
+            position: absolute;
+            top: 0; left: 0; right: 0;
+            height: 16mm;
+            background: var(--metal-bg);
+            color: white;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 15mm;
+            border-bottom: 4px solid var(--sion-dark);
+        }
+
+        .logo-header {
+            display: flex;
+            align-items: center;
+        }
+
+        .header-date { font-size: 8.5pt; font-weight: 400; opacity: 0.9; text-transform: uppercase; letter-spacing: 1px;}
+
+        .page-number {
+            position: absolute;
+            bottom: 8mm;
+            right: 15mm;
+            font-size: 8pt;
+            font-weight: 600;
+            color: #a0aec0;
+        }
+
+        .banner-image {
+            width: 100%;
+            height: 45mm;
+            object-fit: cover;
+            border-radius: 12px;
+            margin-bottom: 4mm;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+        }
+
+        /* --- PÁGINA 1: CAPA PREMIUM --- */
+        .cover-bg {
+            background-image: url('close-up-burning-lamp-dark-copy-space.jpg');
+            background-size: cover;
+            background-position: center;
+            position: absolute;
+            inset: 0;
+        }
+        .cover-overlay {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(180deg, rgba(47,47,47,0.6) 0%, rgba(47,47,47,0.85) 50%, rgba(26,26,26,1) 100%);
+            display: flex;
+            flex-direction: column;
+            padding: 25mm;
+            color: white;
+        }
+
+        .cover-logo-main {
+            display: flex;
+            align-items: center;
+        }
+
+        .cover-titles {
+            margin-top: auto;
+            margin-bottom: 25mm;
+        }
+
+        .cover-titles h1 {
+            font-size: 58pt;
+            font-weight: 900;
+            line-height: 0.95;
+            margin-bottom: 6mm;
+            text-shadow: 0 10px 30px rgba(0,0,0,0.5);
+        }
+        
+        .cover-titles h1 span {
+            background: linear-gradient(to right, #ffffff 0%, var(--sion-blue-metal) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .cover-pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255,255,255,0.3);
+            padding: 5mm 12mm;
+            border-radius: 50px;
+            font-size: 11pt;
+            font-weight: 600;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+
+        .glass-stats-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 6mm;
+            align-items: stretch;
+        }
+
+        .glass-card {
+            background: rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 16px;
+            padding: 8mm 5mm;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            transition: transform 0.3s ease;
+        }
+
+        .glass-card .lbl { font-size: 8pt; text-transform: uppercase; letter-spacing: 1px; opacity: 0.8; margin-bottom: 3mm; font-weight: 500; white-space: nowrap;}
+        .glass-card .val { font-size: 22pt; font-weight: 900; font-family: 'Montserrat'; margin-bottom: 1mm; color: #ffffff; white-space: nowrap;}
+        .glass-card .sub { font-size: 8pt; opacity: 0.6; font-weight: 300; white-space: nowrap;}
+
+        /* --- COMPONENTES INTERNOS --- */
+        
+        .price-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 4mm; margin-bottom: 6mm; }
+        .price-card {
+            background: white;
+            border: 1px solid var(--border-light);
+            border-bottom: 4px solid var(--sion-blue);
+            border-radius: 12px;
+            padding: 5mm;
+            text-align: center;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.04);
+        }
+        .price-card h4 { font-size: 10pt; font-weight: 700; color: var(--text-muted); margin-bottom: 1mm;}
+        .price-card p { font-size: 16pt; font-weight: 800; color: var(--sion-dark); }
+        .price-card.highlight { border-bottom-color: var(--sion-dark); background: var(--bg-light); }
+
+        .chart-box {
+            background: white;
+            border: 1px solid var(--border-light);
+            border-radius: 16px;
+            padding: 5mm;
+            height: 65mm;
+            width: 100%;
+            position: relative;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.03);
+        }
+        .chart-box.large { height: 75mm; }
+
+        .status-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 4mm; margin-bottom: 5mm; }
+        .status-box {
+            background: white;
+            border: 1px solid var(--border-light);
+            border-left: 5px solid var(--border-light);
+            border-radius: 10px;
+            padding: 5mm 4mm;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.03);
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+        }
+        .status-box.green { border-left-color: var(--status-green); }
+        .status-box.yellow { border-left-color: var(--status-yellow); }
+        .status-box.orange { border-left-color: var(--status-orange); }
+        .status-box.red { border-left-color: var(--status-red); }
+        
+        .status-box h4 { font-size: 9pt; font-weight: 800; color: var(--sion-dark); margin-bottom: 2mm;}
+        .status-box p { font-size: 8pt; color: var(--text-muted); line-height: 1.4;}
+
+        .weather-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 5mm; margin-top: 2mm; }
+        .map-card { 
+            background: white; 
+            border-radius: 12px; 
+            padding: 4mm; 
+            border: 1px solid var(--border-light); 
+            box-shadow: 0 4px 15px rgba(0,0,0,0.03);
+        }
+        .map-card h4 { font-size: 9pt; color: var(--sion-blue); margin-bottom: 2mm; display: flex; align-items: center; gap: 5px;}
+        .map-image { width: 100%; height: 50mm; border-radius: 8px; background: #f0f0f0; object-fit: cover; border: 1px solid #eee; }
+
+        .pld-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 4mm; margin-bottom: 6mm;}
+        .pld-card {
+            background: white;
+            padding: 5mm 4mm;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.04);
+            border: 1px solid var(--border-light);
+            position: relative;
+            overflow: hidden;
+        }
+        .pld-card::before {
+            content: ''; position: absolute; top: 0; left: 0; right: 0; height: 4px; background: var(--sion-blue);
+        }
+        .pld-card h4 { font-size: 8pt; color: var(--text-muted); text-transform: uppercase; margin-bottom: 2mm; font-weight: 600;}
+        .pld-card p { font-size: 16pt; font-weight: 800; color: var(--sion-dark); }
+
+        /* --- FOOTER EXECUTIVO COMERCIAL --- */
+        .exec-footer {
+            margin-top: auto;
+            background: var(--sion-dark);
+            color: #ffffff;
+            border-radius: 12px;
+            padding: 8mm;
+            display: flex;
+            align-items: center;
+            justify-content: flex-start;
+            gap: 8mm;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+        }
+
+        .footer-left {
+            display: flex;
+            align-items: center;
+            gap: 5mm;
+        }
+
+        .qr-box {
+            width: 22mm;
+            height: 22mm;
+            background: #ffffff;
+            border-radius: 6px;
+            padding: 1.5mm;
+        }
+        
+        .qr-box img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
+
+        .footer-text h3 {
+            font-family: 'Inter', sans-serif;
+            font-size: 14pt;
+            font-weight: 800;
+            margin-bottom: 2px;
+            letter-spacing: -0.5px;
+        }
+
+        .footer-text p {
+            font-size: 8.5pt;
+            color: #d1d5db;
+            line-height: 1.4;
+        }
+        .footer-text p.bold { font-weight: 700; color: #ffffff; margin-bottom: 3px;}
+
+        .footer-divider {
+            width: 1px;
+            height: 22mm;
+            background: rgba(255,255,255,0.2);
+        }
+
+        .footer-right {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .social-icons {
+            display: flex;
+            gap: 4mm;
+            margin-bottom: 3mm;
+        }
+
+        .social-icons i, .social-icons svg {
+            width: 20px;
+            height: 20px;
+            color: #ffffff;
+        }
+
+        .footer-right p.address {
+            font-size: 8.5pt;
+            color: #d1d5db;
+            line-height: 1.4;
+        }
+
+    </style>
+</head>
+<body>
+
+    <!-- ================= PÁGINA 1: CAPA ================= -->
+    <div class="page">
+        <div class="cover-bg"></div>
+        <div class="cover-overlay">
+            
+            <div class="cover-logo-main">
+                <!-- COLAR LINK DA LOGO ABAIXO (CAPA) -->
+                <img src="Variações_Sion-07.png" alt="Logo Sion Energia" class="cover-logo-img">
+            </div>
+
+            <div class="cover-titles">
+                <h1>Market<br><span>Report</span></h1>
+                <div class="cover-pill">
+                    <i data-lucide="calendar" style="width: 18px; height: 18px;"></i>
+                    27 de agosto de 2025
+                </div>
+            </div>
+
+            <div class="glass-stats-grid">
+                <div class="glass-card">
+                    <span class="lbl">Preço Base (2026)</span>
+                    <span class="val">R$ 286</span>
+                    <span class="sub">Energia Convencional / MWh</span>
+                </div>
+                <div class="glass-card">
+                    <span class="lbl">Carga Média Atual</span>
+                    <span class="val">74,1 GW</span>
+                    <span class="sub">Crescimento constante no SIN</span>
+                </div>
+                <div class="glass-card">
+                    <span class="lbl">PLD SE/CO</span>
+                    <span class="val">R$ 210</span>
+                    <span class="sub">Valor de Liquidação Atual</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ================= PÁGINA 2: PREÇOS DE MERCADO ================= -->
+    <div class="page">
+        <div class="internal-header">
+            <div class="logo-header">
+                <!-- COLAR LINK DA LOGO ABAIXO (CABEÇALHOS INTERNOS) -->
+                <img src="Variações_Sion-07.png" alt="Logo Sion Energia" class="header-logo-img">
+            </div>
+            <div class="header-date">Boletim Semanal • 27 de Agosto, 2025</div>
+        </div>
+
+        <div class="content-area">
+            <img src="electricity-high-voltage-pole-sky.jpg" alt="Mercado de Energia" class="banner-image">
+
+            <div style="flex: 1; display: flex; flex-direction: column; justify-content: center;">
+                <h2 class="section-title">Análise dos Preços de Mercado</h2>
+                <p class="section-desc">Os preços de energia para o ano de 2026 exibiram uma ligeira queda nos últimos sete dias, um movimento de acomodação após o período de alta observado nas semanas anteriores. A curva futura reflete as expectativas climáticas e o comportamento da carga para o médio e longo prazo, apresentando boas oportunidades para contratação de energia limpa.</p>
+                
+                <div class="price-grid">
+                    <div class="price-card"><h4>2026</h4><p>R$ 286</p></div>
+                    <div class="price-card"><h4>2027</h4><p>R$ 244</p></div>
+                    <div class="price-card"><h4>2028</h4><p>R$ 217</p></div>
+                    <div class="price-card"><h4>2029</h4><p>R$ 195</p></div>
+                    <div class="price-card highlight"><h4>2030</h4><p>R$ 185</p></div>
+                </div>
+
+                <div class="chart-box large">
+                    <canvas id="chartPrecos"></canvas>
+                </div>
+            </div>
+        </div>
+        <div class="page-number">Pág 02</div>
+    </div>
+
+    <!-- ================= PÁGINA 3: METEOROLOGIA ================= -->
+    <div class="page">
+        <div class="internal-header">
+            <div class="logo-header">
+                <!-- COLAR LINK DA LOGO ABAIXO (CABEÇALHOS INTERNOS) -->
+                <img src="Variações_Sion-07.png" alt="Logo Sion Energia" class="header-logo-img">
+            </div>
+            <div class="header-date">Boletim Semanal • 27 de Agosto, 2025</div>
+        </div>
+
+        <div class="content-area">
+            <img src="https://images.unsplash.com/photo-1428592953211-077101b2021b?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80" alt="Meteorologia" class="banner-image">
+
+            <div style="flex: 1; display: flex; flex-direction: column; justify-content: center;">
+                <h2 class="section-title">Meteorologia e Previsão de Chuva</h2>
+                <p class="section-desc">O índice pluviométrico é o principal balizador do mercado de curto prazo. O cenário é favorável quando há previsão de chuvas acima das médias históricas nas bacias hidrográficas que abastecem os reservatórios das usinas. Isso contribui significativamente para a recuperação dos níveis de armazenamento e para uma maior segurança energética em todo o Sistema Interligado Nacional (SIN).</p>
+                
+                <div class="weather-grid">
+                    <div class="map-card">
+                        <h4><i data-lucide="cloud-drizzle" style="width: 16px; color: var(--sion-blue-metal)"></i> Próximos 15 dias</h4>
+                        <img src="https://images.unsplash.com/photo-1584267385494-9fdd9a71ad75?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" class="map-image" alt="Mapa Previsão">
+                    </div>
+                    <div class="map-card">
+                        <h4><i data-lucide="calendar" style="width: 16px; color: var(--sion-blue-metal)"></i> Mês de Setembro</h4>
+                        <img src="https://images.unsplash.com/photo-1584267385494-9fdd9a71ad75?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" class="map-image" style="filter: hue-rotate(45deg);" alt="Mapa Setembro">
+                    </div>
+                    <div class="map-card">
+                        <h4><i data-lucide="calendar" style="width: 16px; color: var(--sion-blue-metal)"></i> Mês de Outubro</h4>
+                        <img src="https://images.unsplash.com/photo-1584267385494-9fdd9a71ad75?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" class="map-image" style="filter: hue-rotate(90deg);" alt="Mapa Outubro">
+                    </div>
+                    <div class="map-card">
+                        <h4><i data-lucide="calendar" style="width: 16px; color: var(--sion-blue-metal)"></i> Mês de Novembro</h4>
+                        <img src="https://images.unsplash.com/photo-1584267385494-9fdd9a71ad75?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" class="map-image" style="filter: hue-rotate(135deg);" alt="Mapa Novembro">
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="page-number">Pág 03</div>
+    </div>
+
+    <!-- ================= PÁGINA 4: ENA & EAR ================= -->
+    <div class="page">
+        <div class="internal-header">
+            <div class="logo-header">
+                <!-- COLAR LINK DA LOGO ABAIXO (CABEÇALHOS INTERNOS) -->
+                <img src="Variações_Sion-07.png" alt="Logo Sion Energia" class="header-logo-img">
+            </div>
+            <div class="header-date">Boletim Semanal • 27 de Agosto, 2025</div>
+        </div>
+
+        <div class="content-area">
+            
+            <div style="margin-bottom: 6mm;">
+                <h2 class="section-title">Energia Natural Afluente (ENA)</h2>
+                <p class="section-desc">A ENA mede a quantidade de energia que poderia ser gerada com a água que está chegando aos reservatórios, expressa em percentual da Média de Longo Termo (MLT).</p>
+                
+                <div class="status-grid">
+                    <div class="status-box green">
+                        <h4>> 100%</h4>
+                        <p>Excelente. Chuvas acima da média, boa recuperação e tendência de queda nos preços.</p>
+                    </div>
+                    <div class="status-box yellow">
+                        <h4>80% a 100%</h4>
+                        <p>Situação estável e dentro da normalidade histórica para o período.</p>
+                    </div>
+                    <div class="status-box orange">
+                        <h4>50% a 80%</h4>
+                        <p>Alerta. Requer atenção se o padrão persistir nas próximas semanas.</p>
+                    </div>
+                    <div class="status-box red">
+                        <h4>< 50%</h4>
+                        <p>Crítico. Risco de queda no armazenamento e acionamento térmico.</p>
+                    </div>
+                </div>
+
+                <div class="chart-box">
+                    <canvas id="chartEna"></canvas>
+                </div>
+            </div>
+
+            <div>
+                <h2 class="section-title">Energia Armazenada (EAR)</h2>
+                <p class="section-desc">Representa o volume de água armazenado em termos de energia. Quanto maior o EAR, maior a capacidade de geração por fontes hidráulicas, reduzindo os custos sistêmicos.</p>
+                
+                <div class="status-grid">
+                    <div class="status-box green">
+                        <h4>> 70%</h4>
+                        <p>Confortável. Reservatórios cheios ou próximos de sua capacidade máxima.</p>
+                    </div>
+                    <div class="status-box yellow">
+                        <h4>40% a 70%</h4>
+                        <p>Regular. Exige acompanhamento dependendo da sazonalidade.</p>
+                    </div>
+                    <div class="status-box orange">
+                        <h4>< 40%</h4>
+                        <p>Alerta sistêmico, com foco principal no submercado Sudeste/Centro-Oeste.</p>
+                    </div>
+                    <div class="status-box red">
+                        <h4>< 20%</h4>
+                        <p>Crítico. Despacho intenso de usinas térmicas e alto custo de energia.</p>
+                    </div>
+                </div>
+
+                <div class="chart-box">
+                    <canvas id="chartEar"></canvas>
+                </div>
+            </div>
+
+        </div>
+        <div class="page-number">Pág 04</div>
+    </div>
+
+    <!-- ================= PÁGINA 5: PLD, CARGA & FOOTER ================= -->
+    <div class="page">
+        <div class="internal-header">
+            <div class="logo-header">
+                <!-- COLAR LINK DA LOGO ABAIXO (CABEÇALHOS INTERNOS) -->
+                <img src="Variações_Sion-07.png" alt="Logo Sion Energia" class="header-logo-img">
+            </div>
+            <div class="header-date">Boletim Semanal • 27 de Agosto, 2025</div>
+        </div>
+
+        <div class="content-area">
+            
+            <div style="margin-bottom: 6mm;">
+                <h2 class="section-title">Preço de Liquidação (PLD)</h2>
+                <p class="section-desc">É o valor usado no mercado de curto prazo para valorizar a energia. Serve como referência comercial para calcular quanto se deve pagar ou receber pela diferença entre a energia contratada e a energia efetivamente gerada ou consumida.</p>
+                
+                <div class="pld-grid">
+                    <div class="pld-card"><h4>Nordeste</h4><p>R$ 205,55</p></div>
+                    <div class="pld-card"><h4>Norte</h4><p>R$ 207,88</p></div>
+                    <div class="pld-card"><h4>Sul</h4><p>R$ 211,67</p></div>
+                    <div class="pld-card" style="border-top-color: var(--sion-dark);"><h4>Sudeste / CO</h4><p>R$ 210,02</p></div>
+                </div>
+
+                <div class="chart-box">
+                    <canvas id="chartPld"></canvas>
+                </div>
+            </div>
+
+            <div style="margin-bottom: 5mm;">
+                <h2 class="section-title">Carga do Sistema Interligado</h2>
+                <p class="section-desc">A carga representa o total de energia elétrica demandada no Brasil, diretamente influenciada pela retomada industrial, índices de crescimento econômico e variações de temperatura climática em todo o território.</p>
+                
+                <div class="chart-box">
+                    <canvas id="chartCarga"></canvas>
+                </div>
+            </div>
+
+            <!-- NOVO FOOTER EXECUTIVO -->
+            <div class="exec-footer">
+                <div class="footer-left">
+                    <div class="qr-box">
+                        <img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=https://sionenergia.com.br" alt="QR Code">
+                    </div>
+                    <div class="footer-text">
+                        <h3>PARA SABER MAIS</h3>
+                        <p class="bold">Fale com a nossa equipe!</p>
+                        <p>comercial@sionenergia.com.br</p>
+                    </div>
+                </div>
+
+                <div class="footer-divider"></div>
+
+                <div class="footer-right">
+                    <div class="social-icons">
+                        <!-- Ícone Telefone / WhatsApp -->
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>
+                        <i data-lucide="linkedin"></i>
+                        <i data-lucide="facebook"></i>
+                        <i data-lucide="globe"></i>
+                    </div>
+                    <p class="address">
+                        R. Dr. Manoel Pedro, 365 - 21º Andar - Cabral<br>
+                        Curitiba - PR, 80035-030
+                    </p>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- ================= SCRIPTS DE GRÁFICOS ================= -->
+    <script>
+        lucide.createIcons();
+
+        Chart.defaults.font.family = "'Inter', sans-serif";
+        Chart.defaults.color = "#666666";
+        
+        // Sem animações para PDF perfeito
+        const pdfOptions = { 
+            animation: false,
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: { legend: { position: 'bottom', labels: { boxWidth: 12, font: {size: 11, weight: '500'} } } }
+        };
+        const gridLines = { color: "#f0f0f0" };
+
+        const months = ['Jan','Fev','Mar','Abr','Mai','Jun','Jul','Ago','Set','Out','Nov','Dez'];
+        const monthsShort = ['Mar 25','Abr 25','Mai 25','Jun 25','Jul 25','Ago 25'];
+
+        // Variaveis de cores para o JS
+        const sionBlue = '#384974';
+        const sionBlueMetal = '#627bbb';
+
+        // 1. Gráfico de Preços
+        new Chart(document.getElementById('chartPrecos'), {
+            type: 'line',
+            data: {
+                labels: monthsShort,
+                datasets: [
+                    { label: '2026', data: [240, 265, 275, 270, 260, 286], borderColor: sionBlue, borderWidth: 2.5, tension: 0.3, pointRadius: 3, pointBackgroundColor: sionBlue },
+                    { label: '2027', data: [210, 225, 225, 225, 220, 244], borderColor: sionBlueMetal, borderWidth: 2.5, tension: 0.3, pointRadius: 0 },
+                    { label: '2028', data: [195, 205, 205, 205, 205, 217], borderColor: '#2f2f2f', borderWidth: 2.5, tension: 0.3, pointRadius: 0 },
+                    { label: '2029', data: [185, 190, 190, 185, 188, 195], borderColor: '#a0aec0', borderWidth: 2.5, tension: 0.3, pointRadius: 0 },
+                    { label: '2030', data: [178, 180, 180, 182, 185, 185], borderColor: '#cbd5e1', borderWidth: 2.5, tension: 0.3, pointRadius: 0 }
+                ]
+            },
+            options: { ...pdfOptions, scales: { y: { grid: gridLines, min: 160, max: 300, ticks: { callback: v => 'R$ '+v } }, x: { grid: { display: false } } } }
+        });
+
+        // 2. Gráfico ENA (% MLT)
+        new Chart(document.getElementById('chartEna'), {
+            type: 'line',
+            data: {
+                labels: months,
+                datasets: [
+                    { label: '2024', data: [97.8, 90.2, 65.6, 75.2, 70.9, 92.2, 83.0, 71.9, 52.8, 48.8, 44.3, 58.9], borderColor: '#94a3b8', borderWidth: 2, tension: 0.4 },
+                    { label: '2025', data: [55.1, 48.2, 63.5, 62.6, 63.2, 57.4, null, null, null, null, null, null], borderColor: sionBlue, borderWidth: 3, tension: 0.4 }
+                ]
+            },
+            options: { ...pdfOptions, scales: { y: { grid: gridLines, min: 0, max: 150 }, x: { grid: { display: false } } } }
+        });
+
+        // 3. Gráfico EAR (%)
+        new Chart(document.getElementById('chartEar'), {
+            type: 'line',
+            data: {
+                labels: months,
+                datasets: [
+                    { label: '2024', data: [59.0, 69.6, 69.8, 69.0, 69.9, 68.5, 68.6, 64.5, 50.2, 45.6, 44.5, 47.8], borderColor: '#cbd5e1', backgroundColor: 'rgba(203, 213, 225, 0.3)', fill: true, tension: 0.4 },
+                    { label: '2025', data: [22.4, 21.3, 26.1, 33.0, 35.8, 35.0, 33.5, 30.2, 25.5, 19.8, 18.5, 19.9], borderColor: sionBlue, backgroundColor: 'rgba(56, 73, 116, 0.15)', fill: true, tension: 0.4 }
+                ]
+            },
+            options: { ...pdfOptions, scales: { y: { grid: gridLines, min: 0, max: 80 }, x: { grid: { display: false } } } }
+        });
+
+        // 4. Gráfico PLD
+        new Chart(document.getElementById('chartPld'), {
+            type: 'bar',
+            data: {
+                labels: ['2020','2021','2022','2023','2024','2025'],
+                datasets: [
+                    { label: 'SE/CO', data: [150, 500, 100, 100, 480, 210.02], backgroundColor: '#2f2f2f', borderRadius: 4 },
+                    { label: 'Sul', data: [120, 250, 90, 90, 450, 211.67], backgroundColor: sionBlue, borderRadius: 4 }
+                ]
+            },
+            options: { ...pdfOptions, scales: { y: { grid: gridLines, max: 600, ticks: { callback: v => 'R$ '+v } }, x: { grid: { display: false } } } }
+        });
+
+        // 5. Gráfico Carga
+        new Chart(document.getElementById('chartCarga'), {
+            type: 'line',
+            data: {
+                labels: months,
+                datasets: [
+                    { label: '2024', data: [83.1, 89.2, 86.0, 79.4, 76.2, 74.6, 74.0, 74.1, 80.0, 80.5, 80.2, 79.8], borderColor: '#cbd5e1', tension: 0.4 },
+                    { label: '2025', data: [80.0, 82.0, 81.5, 78.0, 75.0, 74.0, 74.0, 74.1, null, null, null, null], borderColor: sionBlue, borderWidth: 3, tension: 0.4 }
+                ]
+            },
+            options: { ...pdfOptions, scales: { y: { grid: gridLines, min: 40, max: 90 }, x: { grid: { display: false } } } }
+        });
+
+    </script>
+</body>
+</html>

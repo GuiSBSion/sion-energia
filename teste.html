@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Obrigado pelo Feedback - Sion Energia</title>
+    
+    <!-- Fontes Premium -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Montserrat:wght@400;500;700;800;900&display=swap" rel="stylesheet">
+    
+    <!-- Ícones -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <style>
+        :root {
+            /* Cores da Marca */
+            --sion-dark: #2f2f2f;
+            --sion-darker: #1a1a1a;
+            --sion-blue: #384974;
+            --sion-blue-metal: #627bbb;
+            
+            /* Gradientes */
+            --metal-gradient: linear-gradient(135deg, var(--sion-blue) 0%, var(--sion-blue-metal) 100%);
+            --overlay-gradient: linear-gradient(180deg, rgba(47, 47, 47, 0.8) 0%, rgba(26, 26, 26, 0.95) 100%);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body, html {
+            height: 100%;
+            font-family: 'Inter', sans-serif;
+            background-color: var(--sion-darker);
+            color: #ffffff;
+            overflow-x: hidden;
+        }
+
+        /* Imagem de Fundo em Tela Inteira */
+        .hero-background {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url('https://images.unsplash.com/photo-1508514177221-188b1cf16e9d?ixlib=rb-4.0.3&auto=format&fit=crop&w=2000&q=80');
+            background-size: cover;
+            background-position: center;
+            z-index: 1;
+        }
+
+        /* Camada Escura e Elegante sobre a imagem */
+        .hero-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--overlay-gradient);
+            backdrop-filter: blur(8px); /* Deixa o fundo levemente desfocado para focar no texto */
+            -webkit-backdrop-filter: blur(8px);
+            z-index: 2;
+        }
+
+        /* Container Principal do Conteúdo */
+        .content-wrapper {
+            position: relative;
+            z-index: 3;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            align-items: center;
+            min-height: 100vh;
+            padding: 40px 20px;
+            text-align: center;
+        }
+
+        /* Logotipo (Topo) */
+        .logo-header {
+            animation: fadeInDown 0.8s ease-out;
+        }
+
+        .logo-header img {
+            height: 50px;
+            object-fit: contain;
+        }
+
+        /* Bloco Central (Mensagem e Botão) */
+        .main-message {
+            max-width: 700px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            animation: fadeInUp 1s ease-out 0.2s both;
+            opacity: 0; /* Começa invisível para a animação */
+        }
+
+        .icon-check {
+            width: 80px;
+            height: 80px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 2px solid var(--sion-blue-metal);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 30px;
+            color: var(--sion-blue-metal);
+            box-shadow: 0 0 30px rgba(98, 123, 187, 0.3), inset 0 0 20px rgba(98, 123, 187, 0.2);
+        }
+
+        .main-message h1 {
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 800;
+            font-size: 42px;
+            line-height: 1.2;
+            margin-bottom: 20px;
+            letter-spacing: -1px;
+            background: linear-gradient(to right, #ffffff, #c2d1f0);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .main-message p {
+            font-size: 18px;
+            color: rgba(255, 255, 255, 0.85);
+            line-height: 1.6;
+            margin-bottom: 45px;
+            font-weight: 300;
+        }
+
+        /* Botão de Download Premium e Discreto */
+        .btn-download {
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
+            background: transparent;
+            color: #ffffff;
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 600;
+            font-size: 15px;
+            text-decoration: none;
+            padding: 16px 32px;
+            border-radius: 6px;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            transition: all 0.3s ease;
+        }
+
+        .btn-download:hover {
+            background: rgba(255, 255, 255, 0.1);
+            border-color: rgba(255, 255, 255, 0.8);
+            transform: translateY(-2px);
+        }
+
+        /* Rodapé Minimalista (Redes Sociais) */
+        .social-footer {
+            animation: fadeInUp 1s ease-out 0.4s both;
+            opacity: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 15px;
+            margin-top: 40px;
+        }
+
+        .social-footer span {
+            font-size: 13px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: rgba(255, 255, 255, 0.6);
+            font-weight: 600;
+        }
+
+        .social-links {
+            display: flex;
+            gap: 15px;
+        }
+
+        .social-links a {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            color: #ffffff;
+            transition: all 0.3s ease;
+            text-decoration: none;
+        }
+
+        .social-links a:hover {
+            background: var(--sion-blue);
+            border-color: var(--sion-blue-metal);
+            color: #ffffff;
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.4);
+        }
+
+        /* Animações CSS */
+        @keyframes fadeInDown {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Responsividade para Celulares */
+        @media (max-width: 768px) {
+            .main-message h1 {
+                font-size: 32px;
+            }
+            .main-message p {
+                font-size: 16px;
+                padding: 0 10px;
+            }
+            .btn-download {
+                padding: 16px 30px;
+                font-size: 15px;
+                width: 100%;
+                justify-content: center;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Fundo Imersivo -->
+    <div class="hero-background"></div>
+    <div class="hero-overlay"></div>
+
+    <!-- Conteúdo Centralizado -->
+    <div class="content-wrapper">
+        
+        <!-- Logotipo -->
+        <div class="logo-header">
+            <!-- COLAR LINK DA LOGO DA SION AQUI (VERSÃO BRANCA/NEGATIVA) -->
+            <img src="Variações_Sion-07.png" alt="Sion Energia">
+        </div>
+
+        <!-- Mensagem e Call to Action -->
+        <div class="main-message">
+            <div class="icon-check">
+                <i data-lucide="check" stroke-width="2.5" style="width: 40px; height: 40px;"></i>
+            </div>
+            
+            <h1>Agradecemos pelo seu feedback!</h1>
+            
+            <p>
+                Sua opinião foi registrada com sucesso. Ela nos ajuda a refinar nossas análises e a tornar o nosso <strong>Market Report</strong> cada vez mais estratégico e direcionado para a sua operação.
+            </p>
+
+            <a href="[LINK_DO_SEU_PDF_AQUI]" class="btn-download" download>
+                <i data-lucide="download" style="width: 20px; height: 20px;"></i>
+                Baixar Relatório Completo
+            </a>
+        </div>
+
+        <!-- Canais e Redes Sociais Minimalistas -->
+        <div class="social-footer">
+            <span>Acompanhe nossos canais</span>
+            <div class="social-links">
+                <a href="#" aria-label="LinkedIn" title="LinkedIn"><i data-lucide="linkedin" style="width: 18px; height: 18px;"></i></a>
+                <a href="#" aria-label="Instagram" title="Instagram"><i data-lucide="instagram" style="width: 18px; height: 18px;"></i></a>
+                <a href="https://sionenergia.com.br" aria-label="Website" title="Nosso Site"><i data-lucide="globe" style="width: 18px; height: 18px;"></i></a>
+                <a href="#" aria-label="WhatsApp" title="WhatsApp"><i data-lucide="message-circle" style="width: 18px; height: 18px;"></i></a>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Script de Ícones -->
+    <script>
+        lucide.createIcons();
+    </script>
+</body>
+</html>
