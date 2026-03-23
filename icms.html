@@ -1,0 +1,581 @@
+<!DOCTYPE html>
+
+<html class="scroll-smooth" lang="pt-BR">
+
+<head>
+  <meta charset="utf-8" />
+  <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+  <title>ICMS Energy - Recuperação de Créditos de Energia Elétrica</title>
+  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700;800&amp;family=Inter:wght@400;500;600&amp;display=swap"
+    rel="stylesheet" />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+    rel="stylesheet" />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+    rel="stylesheet" />
+  <script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            "primary-fixed-dim": "#b4c5f8",
+            "inverse-surface": "#2d3133",
+            "outline-variant": "#c5c6d0",
+            "outline": "#75777f",
+            "on-secondary-container": "#656464",
+            "on-tertiary": "#ffffff",
+            "secondary-container": "#e4e2e1",
+            "primary": "#21325c",
+            "on-primary-fixed-variant": "#344670",
+            "on-tertiary-container": "#d6b66e",
+            "tertiary": "#423100",
+            "tertiary-fixed": "#ffdf97",
+            "secondary-fixed-dim": "#c8c6c6",
+            "surface-variant": "#e0e3e6",
+            "error": "#ba1a1a",
+            "on-primary-fixed": "#041942",
+            "surface-dim": "#d8dadd",
+            "secondary": "#5f5e5e",
+            "surface-container-low": "#f2f4f7",
+            "on-background": "#191c1e",
+            "on-secondary-fixed-variant": "#474747",
+            "surface-container-highest": "#e0e3e6",
+            "on-tertiary-fixed": "#251a00",
+            "on-surface": "#191c1e",
+            "surface-tint": "#4c5d8a",
+            "tertiary-container": "#5d4707",
+            "primary-fixed": "#dae2ff",
+            "on-primary": "#ffffff",
+            "surface-container": "#eceef1",
+            "surface-container-lowest": "#ffffff",
+            "on-secondary": "#ffffff",
+            "error-container": "#ffdad6",
+            "tertiary-fixed-dim": "#e3c379",
+            "on-error": "#ffffff",
+            "secondary-fixed": "#e4e2e1",
+            "surface": "#f7f9fc",
+            "inverse-on-surface": "#eff1f4",
+            "primary-container": "#384974",
+            "surface-container-high": "#e6e8eb",
+            "on-secondary-fixed": "#1b1c1c",
+            "background": "#f7f9fc",
+            "on-tertiary-fixed-variant": "#594404",
+            "surface-bright": "#f7f9fc",
+            "on-surface-variant": "#45464f",
+            "on-error-container": "#93000a",
+            "inverse-primary": "#b4c5f8",
+            "on-primary-container": "#a8b9eb"
+          },
+          fontFamily: {
+            "headline": ["Manrope"],
+            "body": ["Inter"],
+            "label": ["Inter"]
+          },
+          borderRadius: { "DEFAULT": "0.125rem", "lg": "0.25rem", "xl": "0.5rem", "full": "0.75rem" },
+        },
+      },
+    }
+  </script>
+  <style>
+    .material-symbols-outlined {
+      font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+    }
+
+    .tonal-shift {
+      background-color: #f2f4f7;
+    }
+
+    .glass-header {
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+    }
+
+    .asymmetric-grid {
+      grid-template-columns: 1fr 2fr;
+    }
+
+    @media (max-width: 768px) {
+      .asymmetric-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+
+<body class="bg-surface font-body text-on-surface antialiased">
+  <!-- TopAppBar Navigation -->
+  <header
+    class="fixed top-0 w-full z-50 bg-white/80 dark:bg-slate-900/80 backdrop-blur-md border-b border-slate-200/50 dark:border-slate-800/50 shadow-sm dark:shadow-none">
+    <nav class="flex justify-between items-center px-8 py-4 max-w-full">
+      <div class="text-xl font-black text-blue-950 dark:text-blue-100 uppercase tracking-widest font-headline">ICMS
+        Energy</div>
+      <div class="hidden md:flex gap-8 items-center font-headline font-bold tracking-tight">
+        <a class="text-blue-900 dark:text-blue-300 border-b-2 border-blue-900 dark:border-blue-300 pb-1 transition-all duration-200 hover:opacity-80"
+          href="#benefits">Benefits</a>
+        <a class="text-slate-600 dark:text-slate-400 hover:text-blue-800 dark:hover:text-blue-200 transition-all duration-200 hover:opacity-80"
+          href="#calculations">Calculations</a>
+        <a class="text-slate-600 dark:text-slate-400 hover:text-blue-800 dark:hover:text-blue-200 transition-all duration-200 hover:opacity-80"
+          href="#engineering">Engineering</a>
+        <a class="text-slate-600 dark:text-slate-400 hover:text-blue-800 dark:hover:text-blue-200 transition-all duration-200 hover:opacity-80"
+          href="#faq">FAQ</a>
+        <button
+          class="bg-primary hover:bg-primary-container text-white px-6 py-2 rounded-lg transition-all duration-200 active:scale-95">Simulate</button>
+      </div>
+      <div class="md:hidden">
+        <span class="material-symbols-outlined text-primary text-3xl">menu</span>
+      </div>
+    </nav>
+  </header>
+  <!-- Hero Section -->
+  <section class="relative min-h-[921px] flex items-center pt-20 overflow-hidden bg-surface">
+    <div class="absolute inset-0 z-0">
+      <img class="w-full h-full object-cover opacity-20 grayscale"
+        data-alt="dramatic wide shot of electrical power station transformers and pylons at sunset with moody atmospheric lighting"
+        src="https://lh3.googleusercontent.com/aida-public/AB6AXuD4DBLdvQJVuQ66JdNnUmt5Uzzdk0mrfl-JaVzcMFe8Jlmyhp0nZkNwJzZMWbkTbAk6IB4OYY86bNsmZpt65KdktQQMtWjeW9Q0EMeoo88N6saKbqVjWDvU4yClwVIXE7CuzCByYRks66n94aKBSufrn-6k9qpLzAkQ5ee6GeCFfyFgnab2v941wcEozALbizJNT5i2fBLD4l5qkoIgmhlPQv2DbUGHNNwb6nVOI4WxhEcdDEQmGVM2Tw79ze5z0706Qi9Z8O5HnBaX" />
+      <div class="absolute inset-0 bg-gradient-to-r from-surface via-surface/80 to-transparent"></div>
+    </div>
+    <div class="container mx-auto px-8 relative z-10">
+      <div class="max-w-4xl">
+        <div class="flex items-center gap-4 mb-6">
+          <div class="w-12 h-0.5 bg-primary"></div>
+          <span class="font-label text-primary font-bold uppercase tracking-widest">Efficiency &amp; Compliance</span>
+        </div>
+        <h1 class="font-headline text-5xl md:text-7xl font-extrabold text-primary leading-tight tracking-tight mb-8">
+          Sua indústria pode estar pagando ICMS a mais na conta de energia — <span class="text-primary-container">e não
+            sabe.</span>
+        </h1>
+        <p class="font-body text-xl text-on-surface-variant max-w-2xl mb-10 leading-relaxed">
+          A legislação permite crédito de ICMS sobre a energia usada no processo produtivo. Nós analisamos sua operação
+          e emitimos laudo técnico com ART para quantificar e viabilizar esse crédito com segurança.
+        </p>
+        <div class="flex flex-col sm:flex-row gap-4">
+          <a class="bg-gradient-to-br from-primary to-primary-container text-on-primary px-8 py-4 rounded-lg font-bold text-center shadow-lg hover:opacity-90 transition-all"
+            href="#contact">
+            Solicitar análise de ICMS da energia
+          </a>
+          <a class="border border-outline-variant/30 text-primary px-8 py-4 rounded-lg font-bold text-center hover:bg-surface-container-low transition-all"
+            href="#engineering">
+            Ver metodologia técnica
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+  <!-- Section 2: Problem (The Gap) -->
+  <section class="py-24 bg-surface-container-low" id="benefits">
+    <div class="container mx-auto px-8">
+      <div class="grid md:grid-cols-2 gap-16 items-center">
+        <div class="relative">
+          <img class="rounded-xl shadow-2xl relative z-10"
+            data-alt="modern industrial factory floor with high-tech automated machinery and precise engineering assembly lines"
+            src="https://lh3.googleusercontent.com/aida-public/AB6AXuDwqcCKtTeCQL1ZW8G-6rY9iXWj6_7Cb4SuoU-iU___kL2P80Rw6m6x2G3EYWwjXOw9fe4KwEJ7wn7YA4zITrZxvkdMN0r1aDske7pnMYFOEGFktDKik5IL7QLLzuFUN7hyxBhvneVK9O7qktryKv5aEwEiXCeC4aOw7Q8ZoCUkyZmSd5G3fsqdzmi8CAjefc2r4QcHyZcmamgSpu7vP03bTh8PtQSAtSUVJ9Y_TAxGuKMvW3DR4k_r5wVMoWXzc06OKthqwnXgKWxm" />
+          <div class="absolute -bottom-6 -right-6 w-64 h-64 bg-primary-fixed-dim/30 rounded-full blur-3xl -z-10"></div>
+        </div>
+        <div>
+          <h2 class="font-headline text-4xl font-bold text-primary mb-8 leading-tight">
+            Por que sua empresa pode estar pagando ICMS a mais?
+          </h2>
+          <div class="space-y-8">
+            <div class="flex gap-6">
+              <div
+                class="flex-shrink-0 w-12 h-12 rounded bg-surface-container-lowest flex items-center justify-center text-primary">
+                <span class="material-symbols-outlined"
+                  style="font-variation-settings: 'FILL' 1;">precision_manufacturing</span>
+              </div>
+              <div>
+                <h4 class="font-headline font-bold text-lg mb-2">Energia em Máquinas (Crédito)</h4>
+                <p class="text-on-surface-variant">Toda energia consumida diretamente no processo produtivo gera direito
+                  ao crédito de ICMS.</p>
+              </div>
+            </div>
+            <div class="flex gap-6">
+              <div
+                class="flex-shrink-0 w-12 h-12 rounded bg-surface-container-lowest flex items-center justify-center text-error/20 text-error">
+                <span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">corporate_fare</span>
+              </div>
+              <div>
+                <h4 class="font-headline font-bold text-lg mb-2">Energia em Escritórios (Sem Crédito)</h4>
+                <p class="text-on-surface-variant">Consumo administrativo e áreas comuns não permitem a compensação
+                  tributária.</p>
+              </div>
+            </div>
+            <p class="bg-white p-6 border-l-4 border-primary italic text-on-secondary-fixed-variant shadow-sm">
+              "Sem uma medição precisa ou um laudo técnico, a Receita presume um consumo produtivo menor do que o real,
+              gerando pagamentos indevidos mês após mês."
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  <!-- Section 3: Practical Example Card -->
+  <section class="py-24 bg-surface" id="calculations">
+    <div class="container mx-auto px-8">
+      <div class="text-center max-w-2xl mx-auto mb-16">
+        <h2 class="font-headline text-3xl font-bold text-primary mb-4">Exemplo Prático de Recuperação</h2>
+        <p class="text-on-surface-variant">Veja como a segregação técnica impacta diretamente o fluxo de caixa da sua
+          indústria.</p>
+      </div>
+      <div
+        class="max-w-4xl mx-auto bg-surface-container-lowest rounded-xl shadow-xl overflow-hidden flex flex-col md:flex-row">
+        <div class="p-10 bg-primary text-white md:w-1/3 flex flex-col justify-center">
+          <span class="font-label uppercase tracking-widest opacity-70 mb-2">Fatura Mensal</span>
+          <div class="text-4xl font-black mb-4 tracking-tight">R$ 120.000</div>
+          <p class="text-sm opacity-80">Valor hipotético baseado em consumo médio industrial.</p>
+        </div>
+        <div class="p-10 grid grid-cols-1 md:grid-cols-2 gap-10 flex-grow">
+          <div class="space-y-2">
+            <span class="text-on-surface-variant font-label uppercase">ICMS na Fatura (18%)</span>
+            <div class="text-2xl font-bold text-primary">R$ 21.600,00</div>
+            <div class="h-1 bg-surface-container-high rounded"></div>
+          </div>
+          <div class="space-y-2">
+            <span class="text-primary font-label uppercase font-bold">Crédito Estimado (60%)</span>
+            <div class="text-2xl font-bold text-primary-container">R$ 12.960,00</div>
+            <div class="h-1 bg-primary-fixed-dim rounded"></div>
+          </div>
+          <div class="col-span-full pt-6 border-t border-outline-variant/10">
+            <p class="text-sm text-on-surface-variant leading-relaxed">
+              <span class="font-bold text-primary">Impacto Anual:</span> Com a implementação correta do laudo, a
+              economia direta estimada seria de <span class="font-bold">R$ 155.520,00</span> por ano.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  <!-- Section 4: Who can benefit (Bento Grid Style) -->
+  <section class="py-24 bg-surface-container-low">
+    <div class="container mx-auto px-8">
+      <h2 class="font-headline text-3xl font-bold text-primary mb-12 text-center">Quem pode se beneficiar?</h2>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div
+          class="bg-surface-container-lowest p-8 rounded-lg shadow-sm hover:shadow-md transition-all border-b-4 border-primary">
+          <span class="material-symbols-outlined text-4xl text-primary mb-4">factory</span>
+          <h3 class="font-headline font-bold text-xl mb-3">Indústrias Gerais</h3>
+          <p class="text-on-surface-variant text-sm">Empresas de Lucro Real ou Presumido que possuam processo de
+            transformação.</p>
+        </div>
+        <div
+          class="bg-surface-container-lowest p-8 rounded-lg shadow-sm hover:shadow-md transition-all border-b-4 border-primary">
+          <span class="material-symbols-outlined text-4xl text-primary mb-4">agriculture</span>
+          <h3 class="font-headline font-bold text-xl mb-3">Agroindústria</h3>
+          <p class="text-on-surface-variant text-sm">Setores de Alimentos, Frigoríficos, Madeira e Beneficiamento de
+            Grãos.</p>
+        </div>
+        <div
+          class="bg-surface-container-lowest p-8 rounded-lg shadow-sm hover:shadow-md transition-all border-b-4 border-primary">
+          <span class="material-symbols-outlined text-4xl text-primary mb-4">construction</span>
+          <h3 class="font-headline font-bold text-xl mb-3">Extração e Mineração</h3>
+          <p class="text-on-surface-variant text-sm">Operações com alto consumo energético em maquinário de extração e
+            beneficiamento.</p>
+        </div>
+        <div class="md:col-span-3 flex flex-wrap justify-center gap-3 mt-4">
+          <span
+            class="px-4 py-2 bg-white text-primary text-xs font-bold uppercase rounded border border-outline-variant/20 tracking-wider">Metalúrgica</span>
+          <span
+            class="px-4 py-2 bg-white text-primary text-xs font-bold uppercase rounded border border-outline-variant/20 tracking-wider">Plásticos</span>
+          <span
+            class="px-4 py-2 bg-white text-primary text-xs font-bold uppercase rounded border border-outline-variant/20 tracking-wider">Têxtil</span>
+          <span
+            class="px-4 py-2 bg-white text-primary text-xs font-bold uppercase rounded border border-outline-variant/20 tracking-wider">Química</span>
+          <span
+            class="px-4 py-2 bg-white text-primary text-xs font-bold uppercase rounded border border-outline-variant/20 tracking-wider">Cerâmica</span>
+        </div>
+      </div>
+    </div>
+  </section>
+  <!-- Section 5: Mistakes (Editorial Layout) -->
+  <section class="py-24 bg-surface relative overflow-hidden">
+    <div class="container mx-auto px-8 relative z-10">
+      <div class="max-w-2xl">
+        <h2 class="font-headline text-4xl font-bold text-primary mb-8 leading-tight">Os 3 Erros mais comuns na Gestão de
+          Créditos</h2>
+        <div class="space-y-12">
+          <div class="relative pl-12">
+            <div class="absolute left-0 top-0 text-5xl font-black text-primary/10">01</div>
+            <h4 class="font-headline font-bold text-xl mb-2">Segregação Incorreta</h4>
+            <p class="text-on-surface-variant">Utilizar porcentagens "estimadas" pelo financeiro sem embasamento
+              técnico. Isso atrai multas e fiscalizações.</p>
+          </div>
+          <div class="relative pl-12">
+            <div class="absolute left-0 top-0 text-5xl font-black text-primary/10">02</div>
+            <h4 class="font-headline font-bold text-xl mb-2">Ausência de ART</h4>
+            <p class="text-on-surface-variant">O crédito de energia exige um Engenheiro Eletricista responsável. Sem a
+              ART, o laudo não tem validade jurídica perante o fisco.</p>
+          </div>
+          <div class="relative pl-12">
+            <div class="absolute left-0 top-0 text-5xl font-black text-primary/10">03</div>
+            <h4 class="font-headline font-bold text-xl mb-2">Critérios Subjetivos</h4>
+            <p class="text-on-surface-variant">Falta de atualização periódica dos laudos conforme as mudanças no parque
+              fabril da empresa.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- Technical overlay pattern -->
+    <div class="absolute right-0 top-0 w-1/3 h-full opacity-5 pointer-events-none">
+      <svg class="w-full h-full" preserveaspectratio="none" viewbox="0 0 100 100">
+        <path class="text-primary" d="M0,0 L100,0 L100,100 Z" fill="currentColor"></path>
+      </svg>
+    </div>
+  </section>
+  <!-- Section 6: How it Works (Steps) -->
+  <section class="py-24 bg-surface-container-high" id="engineering">
+    <div class="container mx-auto px-8">
+      <div class="text-center mb-16">
+        <h2 class="font-headline text-3xl font-bold text-primary">Metodologia Técnica Certificada</h2>
+        <p class="text-on-surface-variant mt-2">Segurança jurídica e precisão de engenharia em cada etapa.</p>
+      </div>
+      <div class="grid grid-cols-1 md:grid-cols-5 gap-8">
+        <div class="flex flex-col items-center text-center group">
+          <div
+            class="w-16 h-16 rounded-full bg-primary flex items-center justify-center text-white mb-4 transition-transform group-hover:scale-110">
+            <span class="material-symbols-outlined">folder_zip</span>
+          </div>
+          <h5 class="font-headline font-bold text-sm uppercase mb-2">Coleta de Dados</h5>
+          <p class="text-xs text-on-surface-variant">Análise preliminar das faturas e planta baixa.</p>
+        </div>
+        <div class="flex flex-col items-center text-center group">
+          <div
+            class="w-16 h-16 rounded-full bg-primary flex items-center justify-center text-white mb-4 transition-transform group-hover:scale-110">
+            <span class="material-symbols-outlined">analytics</span>
+          </div>
+          <h5 class="font-headline font-bold text-sm uppercase mb-2">Estudo Técnico</h5>
+          <p class="text-xs text-on-surface-variant">Medição de carga e mapeamento de motores.</p>
+        </div>
+        <div class="flex flex-col items-center text-center group">
+          <div
+            class="w-16 h-16 rounded-full bg-primary flex items-center justify-center text-white mb-4 transition-transform group-hover:scale-110">
+            <span class="material-symbols-outlined">verified</span>
+          </div>
+          <h5 class="font-headline font-bold text-sm uppercase mb-2">Laudo com ART</h5>
+          <p class="text-xs text-on-surface-variant">Emissão de documento certificado pelo CREA.</p>
+        </div>
+        <div class="flex flex-col items-center text-center group">
+          <div
+            class="w-16 h-16 rounded-full bg-primary flex items-center justify-center text-white mb-4 transition-transform group-hover:scale-110">
+            <span class="material-symbols-outlined">account_balance</span>
+          </div>
+          <h5 class="font-headline font-bold text-sm uppercase mb-2">Análise Tributária</h5>
+          <p class="text-xs text-on-surface-variant">Cruzamento de dados para crédito seguro.</p>
+        </div>
+        <div class="flex flex-col items-center text-center group">
+          <div
+            class="w-16 h-16 rounded-full bg-primary flex items-center justify-center text-white mb-4 transition-transform group-hover:scale-110">
+            <span class="material-symbols-outlined">rocket_launch</span>
+          </div>
+          <h5 class="font-headline font-bold text-sm uppercase mb-2">Implementação</h5>
+          <p class="text-xs text-on-surface-variant">Apoio na escrituração e recuperação retroativa.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+  <!-- Section 7: Potential Table -->
+  <section class="py-24 bg-surface">
+    <div class="container mx-auto px-8">
+      <div class="bg-surface-container-lowest rounded-xl border border-outline-variant/10 shadow-lg overflow-hidden">
+        <div class="p-8 border-b border-outline-variant/10">
+          <h2 class="font-headline text-2xl font-bold text-primary">Projeção de Recuperação (5 Anos)</h2>
+        </div>
+        <div class="overflow-x-auto">
+          <table class="w-full text-left">
+            <thead>
+              <tr class="bg-surface-container-low text-primary font-label text-xs uppercase tracking-widest">
+                <th class="p-6">Indicador</th>
+                <th class="p-6">Valor Referência</th>
+                <th class="p-6">Total Recuperável</th>
+              </tr>
+            </thead>
+            <tbody class="font-body text-sm">
+              <tr class="border-b border-outline-variant/5">
+                <td class="p-6 font-bold">Fatura Mensal Média</td>
+                <td class="p-6">R$ 100.000,00</td>
+                <td class="p-6 text-on-surface-variant">—</td>
+              </tr>
+              <tr class="border-b border-outline-variant/5">
+                <td class="p-6 font-bold">ICMS Mensal (18%)</td>
+                <td class="p-6">R$ 18.000,00</td>
+                <td class="p-6 text-on-surface-variant">—</td>
+              </tr>
+              <tr class="border-b border-outline-variant/5 bg-primary/5">
+                <td class="p-6 font-bold text-primary">Crédito Produtivo (70%)</td>
+                <td class="p-6 text-primary">R$ 12.600,00 /mês</td>
+                <td class="p-6 font-black text-primary">R$ 756.000,00</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div
+          class="p-6 bg-surface-container-highest text-xs text-on-surface-variant text-center uppercase tracking-widest">
+          *Cálculo baseado em prescrição legal de 60 meses. Valores podem variar conforme a alíquota estadual.
+        </div>
+      </div>
+    </div>
+  </section>
+  <!-- Section 8: Safety (Asymmetric) -->
+  <section class="py-24 bg-primary text-on-primary">
+    <div class="container mx-auto px-8">
+      <div class="grid md:grid-cols-12 gap-12 items-center">
+        <div class="md:col-span-7">
+          <h2 class="font-headline text-4xl font-bold mb-6">A Essencialidade da ART (CREA)</h2>
+          <p class="text-on-primary-container text-lg leading-relaxed mb-8">
+            Não se trata apenas de um cálculo contábil. A Anotação de Responsabilidade Técnica (ART) é o que blinda sua
+            empresa perante a fiscalização estadual. Ela atesta que um profissional habilitado realizou as medições em
+            loco e assina pela precisão dos índices informados.
+          </p>
+          <ul class="space-y-4">
+            <li class="flex items-start gap-3">
+              <span class="material-symbols-outlined text-tertiary-fixed">check_circle</span>
+              <span>Redução drástica de risco de glosa fiscal.</span>
+            </li>
+            <li class="flex items-start gap-3">
+              <span class="material-symbols-outlined text-tertiary-fixed">check_circle</span>
+              <span>Embasamento jurídico para pedidos administrativos.</span>
+            </li>
+            <li class="flex items-start gap-3">
+              <span class="material-symbols-outlined text-tertiary-fixed">check_circle</span>
+              <span>Segurança para o Contador e Diretor Financeiro.</span>
+            </li>
+          </ul>
+        </div>
+        <div class="md:col-span-5">
+          <div class="bg-white/10 backdrop-blur-md p-8 rounded-lg border border-white/20">
+            <img class="rounded mb-6"
+              data-alt="professional engineer in safety gear reviewing technical blueprints on a tablet at an industrial facility"
+              src="https://lh3.googleusercontent.com/aida-public/AB6AXuD8gIi5gV3Rbd1MUu9vIamPRPF4Afs5PAW8gSsqEJfoIg-nIa_82xiCsRcQoRcDeB_ZN_XN-_d-kdNLNtujQ2AeyIb00BBUF7Ib6LUH9dzgBZ_VUAi-ijhwUPiErpkO-E8HUAypYkSW0kbijg8ZKZ31FkYtUCPkz87PWc_7eEPdzBZfn-mKkQq0VGF1W26Cnk6gygOgoIYcjP4vQyckAB-UHIYvcLzwk-m8E9G-h1sBoodSo2G3v1pV6RhVZhDe0E3w-SPGWyc_Zkx1" />
+            <div class="text-sm font-label uppercase tracking-widest text-primary-fixed">Compliance Technical Team</div>
+            <p class="mt-2 text-sm italic opacity-80">"Engenharia e Direito Tributário trabalhando em sinergia para
+              maximizar seus créditos com risco zero."</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  <!-- Section 9: FAQ -->
+  <section class="py-24 bg-surface-container-low" id="faq">
+    <div class="container mx-auto px-8">
+      <h2 class="font-headline text-3xl font-bold text-primary mb-12 text-center">Perguntas Frequentes</h2>
+      <div class="max-w-3xl mx-auto space-y-4">
+        <details class="bg-white p-6 rounded shadow-sm group">
+          <summary class="list-none font-bold text-primary cursor-pointer flex justify-between items-center">
+            Empresas do Simples Nacional podem creditar?
+            <span class="material-symbols-outlined transition-transform group-open:rotate-180">expand_more</span>
+          </summary>
+          <p class="mt-4 text-on-surface-variant text-sm leading-relaxed">Não. O crédito de ICMS sobre energia elétrica
+            é aplicável apenas a empresas que apuram o imposto pelo regime de Débito/Crédito (Lucro Real ou Presumido).
+          </p>
+        </details>
+        <details class="bg-white p-6 rounded shadow-sm group">
+          <summary class="list-none font-bold text-primary cursor-pointer flex justify-between items-center">
+            Quanto tempo leva para ver os resultados?
+            <span class="material-symbols-outlined transition-transform group-open:rotate-180">expand_more</span>
+          </summary>
+          <p class="mt-4 text-on-surface-variant text-sm leading-relaxed">O laudo técnico é finalizado em média em 15 a
+            30 dias após a coleta de dados. Uma vez emitido, a empresa já pode utilizar o crédito na escrituração do mês
+            seguinte.</p>
+        </details>
+        <details class="bg-white p-6 rounded shadow-sm group">
+          <summary class="list-none font-bold text-primary cursor-pointer flex justify-between items-center">
+            É necessário entrar na justiça?
+            <span class="material-symbols-outlined transition-transform group-open:rotate-180">expand_more</span>
+          </summary>
+          <p class="mt-4 text-on-surface-variant text-sm leading-relaxed">Na maioria dos estados, a compensação é
+            administrativa, baseada puramente na comprovação técnica (laudo) e escrituração contábil correta.</p>
+        </details>
+      </div>
+    </div>
+  </section>
+  <!-- Final CTA Section -->
+  <section class="py-24 bg-surface relative overflow-hidden" id="contact">
+    <div class="container mx-auto px-8 relative z-10">
+      <div
+        class="bg-surface-container-lowest rounded-2xl shadow-2xl overflow-hidden flex flex-col md:flex-row max-w-5xl mx-auto border border-outline-variant/10">
+        <div class="md:w-1/2 p-12 bg-primary text-white flex flex-col justify-center">
+          <h2 class="font-headline text-4xl font-extrabold mb-6 leading-tight">Pronto para otimizar sua carga
+            tributária?</h2>
+          <p class="text-on-primary-container text-lg mb-8">Nossos especialistas estão prontos para realizar um
+            diagnóstico gratuito da sua conta de energia.</p>
+          <div class="space-y-4">
+            <div class="flex items-center gap-4">
+              <span class="material-symbols-outlined text-primary-fixed">call</span>
+              <span>(11) 4003-XXXX</span>
+            </div>
+            <div class="flex items-center gap-4">
+              <span class="material-symbols-outlined text-primary-fixed">mail</span>
+              <span>contato@icmsenergy.com.br</span>
+            </div>
+          </div>
+        </div>
+        <div class="md:w-1/2 p-12 bg-white">
+          <form class="space-y-5">
+            <div>
+              <label class="block text-xs font-bold text-on-surface-variant uppercase tracking-widest mb-1">Nome
+                Completo</label>
+              <input
+                class="w-full bg-surface-container border-0 border-b-2 border-outline focus:border-primary focus:ring-0 transition-all rounded-none p-3"
+                placeholder="Seu nome" type="text" />
+            </div>
+            <div>
+              <label
+                class="block text-xs font-bold text-on-surface-variant uppercase tracking-widest mb-1">Empresa</label>
+              <input
+                class="w-full bg-surface-container border-0 border-b-2 border-outline focus:border-primary focus:ring-0 transition-all rounded-none p-3"
+                placeholder="Nome da sua indústria" type="text" />
+            </div>
+            <div class="grid grid-cols-2 gap-4">
+              <div>
+                <label
+                  class="block text-xs font-bold text-on-surface-variant uppercase tracking-widest mb-1">E-mail</label>
+                <input
+                  class="w-full bg-surface-container border-0 border-b-2 border-outline focus:border-primary focus:ring-0 transition-all rounded-none p-3"
+                  placeholder="e-mail corporativo" type="email" />
+              </div>
+              <div>
+                <label
+                  class="block text-xs font-bold text-on-surface-variant uppercase tracking-widest mb-1">Telefone</label>
+                <input
+                  class="w-full bg-surface-container border-0 border-b-2 border-outline focus:border-primary focus:ring-0 transition-all rounded-none p-3"
+                  placeholder="(00) 00000-0000" type="tel" />
+              </div>
+            </div>
+            <button
+              class="w-full bg-primary text-white py-4 rounded font-bold uppercase tracking-widest text-sm hover:bg-primary-container transition-all shadow-lg active:scale-95 mt-4"
+              type="submit">
+              Solicitar análise de ICMS da energia
+            </button>
+            <p class="text-[10px] text-center text-on-surface-variant mt-4 opacity-60">Seus dados estão protegidos
+              conforme a LGPD.</p>
+          </form>
+        </div>
+      </div>
+    </div>
+  </section>
+  <!-- Footer -->
+  <footer
+    class="w-full py-12 px-8 border-t border-slate-200 dark:border-slate-800 tonal-shift bg-slate-100 dark:bg-slate-900 flat no-shadows">
+    <div class="container mx-auto grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
+      <div>
+        <div class="font-manrope font-extrabold text-blue-900 dark:text-blue-200 text-xl mb-4">ICMS ENERGY</div>
+        <p class="font-inter text-sm antialiased text-slate-500 dark:text-slate-400">© 2024 Industrial Energy Precision.
+          Engineering Certified ART.</p>
+      </div>
+      <div class="flex flex-wrap gap-6 md:justify-end">
+        <a class="text-slate-500 dark:text-slate-400 hover:underline decoration-blue-900 dark:decoration-blue-400 underline-offset-4 font-inter text-sm antialiased"
+          href="#">Privacy Policy</a>
+        <a class="text-slate-500 dark:text-slate-400 hover:underline decoration-blue-900 dark:decoration-blue-400 underline-offset-4 font-inter text-sm antialiased"
+          href="#">Technical Standards</a>
+        <a class="text-slate-500 dark:text-slate-400 hover:underline decoration-blue-900 dark:decoration-blue-400 underline-offset-4 font-inter text-sm antialiased"
+          href="#">Terms of Credit</a>
+        <a class="font-bold text-blue-900 dark:text-blue-300 hover:underline decoration-blue-900 dark:decoration-blue-400 underline-offset-4 font-inter text-sm antialiased"
+          href="#">Contact Support</a>
+      </div>
+    </div>
+  </footer>
+</body>
+
+</html>
